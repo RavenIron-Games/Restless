@@ -1,0 +1,33 @@
+# Game and framework assemblies - not ours to redistribute.
+# Each dev runs tools\fetch-libs.ps1 to populate this.
+libs/
+
+# Build output
+bin/
+obj/
+[Rr]elease/
+[Dd]ebug/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Release zips
+dist/
+
+# Local DLL backups
+*.bak
+
+# Local build, package and icon scripts, and dev notes: kept out of the repository.
+tools/
+CLAUDE.md
