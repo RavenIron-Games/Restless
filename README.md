@@ -62,6 +62,7 @@ Open the console with **F5**. Every command checks the server's admin list.
 | `restless 200` | The same for every location within 200 m. |
 | `restless reset` | Resets the nearest location that can reset, right now. Stand just outside it: nobody can be inside. |
 | `restless reset 200` | Resets every one within 200 m (up to 5000 m), one every half second, and sends you a summary. Any with a player inside are skipped. |
+| `restless reload` | Re-reads the server's config right away and says what changed. You rarely need it: the server notices a saved config file within 3 seconds, no restart needed. |
 
 <details>
 <summary>How to tell what a location is called</summary>

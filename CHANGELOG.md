@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- The config reloads live: save `com.raveniron.restless.cfg` and the server picks up the change within 3 seconds,
+  no restart. The log names each setting that changed.
+- New admin command `restless reload`: re-read the config now.
+
 ## 0.1.0
 
 - First release. Dungeons (burial chambers, sunken crypts, frost caves, infested mines) reset after `ResetAfterDays`

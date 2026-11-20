@@ -12,6 +12,7 @@ namespace RavenIron.Restless
     ///   restless 200          every location within 200 m: whether each resets, and when
     ///   restless reset        reset the nearest location that can reset (within 40 m of its edge)
     ///   restless reset 200    reset every one within 200 m
+    ///   restless reload       re-read the server's .cfg now (it also re-reads itself within 3 s of being saved)
     /// The client forwards the verb, the radius and its position; the server checks the adminlist itself.
     /// Resets are queued and run one every half second, so a big radius never stalls the server, and the asker
     /// gets one summary when the batch is done.
@@ -38,12 +39,17 @@ namespace RavenIron.Restless
             private static void Postfix()
             {
                 new Terminal.ConsoleCommand("restless",
-                    "Restless (admins only): restless [radius] = what resets here or within radius m | restless reset [radius] = reset the nearest, or all within radius m",
+                    "Restless (admins only): restless [radius] = what resets here or within radius m | restless reset [radius] = reset the nearest, or all within radius m | restless reload = re-read the server's config now",
                     (Terminal.ConsoleEvent)(args =>
                     {
                         if (ZRoutedRpc.instance == null || Player.m_localPlayer == null)
                         {
                             args.Context.AddString("Restless: join a world first.");
+                            return;
+                        }
+                        if (args.Args.Length == 2 && string.Equals(args.Args[1].Trim(), "reload", StringComparison.OrdinalIgnoreCase))
+                        {
+                            ZRoutedRpc.instance.InvokeRoutedRPC(CmdRpc, "reload", Player.m_localPlayer.transform.position, 0f);
                             return;
                         }
                         if (!Rules.ParseCommand(args.Args, out bool reset, out float radius, out string error))
@@ -88,6 +94,7 @@ namespace RavenIron.Restless
         private static string Handle(long sender, string verb, Vector3 pos, float radius)
         {
             if (!IsAdmin(sender)) return "Restless: admins only.";
+            if (verb == "reload") return "Restless: " + ConfigWatch.ReloadFile("restless reload");
             radius = Mathf.Clamp(radius, 0f, Rules.MaxCommandRadius);
             bool reset = verb == "reset";
 

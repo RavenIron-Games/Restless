@@ -69,6 +69,9 @@ namespace RavenIron.Restless
             VerboseLogging = Config.Bind("3 - Debug", "VerboseLogging", false,
                 "Log every location as it is first stamped and every reset that was held back.");
 
+            ConfigWatch.Init(Config, Enabled, ResetAfterDays, TriggerDistance, SafeDistance, Include, SkipIfPlayerBuilt,
+                KeepDroppedItems, Exclude, VerboseLogging);
+
             new Harmony(Guid).PatchAll(typeof(Plugin).Assembly);
             Log.LogInfo($"Restless {Version} loaded.");
         }
@@ -84,6 +87,7 @@ namespace RavenIron.Restless
                     _cooldown.Clear();
                     _seen.Clear();
                 }
+                ConfigWatch.Tick(Time.deltaTime);
                 Commands.Pump();
                 if (Time.time < _nextCheck) return;
                 _nextCheck = Time.time + CheckSeconds;
