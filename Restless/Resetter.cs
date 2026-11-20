@@ -75,7 +75,7 @@ namespace RavenIron.Restless
         }
 
         [Flags]
-        private enum PrefabKind { None = 0, Unknown = 1, Character = 2, Item = 4, Piece = 8 }
+        private enum PrefabKind { None = 0, Unknown = 1, Character = 2, Item = 4, Piece = 8, Structure = 16 }
 
         internal static bool TryResolve()
         {
@@ -293,10 +293,15 @@ namespace RavenIron.Restless
                 if (zdo.GetBool(ZDOVars.s_tamed)) { r.Keep(prefab); continue; }
                 if (!own && (kind & PrefabKind.Item) != 0 && Plugin.KeepDroppedItems.Value) { r.Keep(prefab); continue; }
 
-                // Inside a dungeon, or a ground generator's box, everything not protected above belongs to it. Elsewhere
-                // only what the location places, and the creatures standing in it.
+                // Inside a dungeon, or a ground generator's box, everything not protected above belongs to it. Elsewhere:
+                // what the location places, the creatures standing in it, and any structure nobody built. A structure
+                // (a piece, or anything that can be broken) with no creator inside a location is the location's, even
+                // when its prefab is not in the location's own list: the charred fortress gains a ballista
+                // (piece_Charred_Balista) per rebuild from something other than its own children, and its broken walls
+                // leave `_frac` rubble. Player pieces carry a creator and natural rocks are vegetation, both handled above.
                 bool generated = interior || (shape.Shape == Shape.GroundGenerator && InBox(site, shape, p, 0f));
-                if (generated || own || (kind & PrefabKind.Character) != 0) wipe.Add(zdo);
+                bool structure = (kind & PrefabKind.Structure) != 0;
+                if (generated || own || structure || (kind & PrefabKind.Character) != 0) wipe.Add(zdo);
                 else r.Keep(prefab);
             }
 
@@ -434,6 +439,8 @@ namespace RavenIron.Restless
                 if (go.GetComponent<Character>() != null) k |= PrefabKind.Character;
                 if (go.GetComponent<ItemDrop>() != null) k |= PrefabKind.Item;
                 if (go.GetComponent<Piece>() != null) k |= PrefabKind.Piece;
+                if ((k & PrefabKind.Piece) != 0 || go.GetComponent<WearNTear>() != null || go.GetComponent<Destructible>() != null)
+                    k |= PrefabKind.Structure;
             }
             Kinds[prefab] = k;
             return k;
