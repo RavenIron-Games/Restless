@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.1
+
+- Troll caves reset properly. Their inside is built high above the entrance, the way a dungeon's is, and was never
+  cleared: every reset added another troll spawner, chest and set of pickables on top of the last. The first reset
+  with 0.2.1 clears what piled up.
+- A player inside a troll cave now holds its reset back, as in any dungeon.
+- A reset also clears the creatures the location's spawners made, even ones that wandered out of it.
+- A troll cave's reset touches only its own things, never a neighbouring burial chamber's.
+
 ## 0.2.0
 
 - The config reloads live: save `com.raveniron.restless.cfg` and the server picks up the change within 3 seconds,

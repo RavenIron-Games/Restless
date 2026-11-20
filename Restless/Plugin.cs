@@ -20,7 +20,7 @@ namespace RavenIron.Restless
     public class Plugin : BaseUnityPlugin
     {
         public const string Guid = "com.raveniron.restless";
-        public const string Version = "0.2.0";
+        public const string Version = "0.2.1";
         internal static ManualLogSource Log;
 
         internal static ConfigEntry<bool> Enabled;
