@@ -72,6 +72,12 @@ namespace RavenIron.Restless
             public Vector3 DungeonSize;
             /// <summary>How far from its centre the location's own above-ground objects reach (a troll cave runs back into the hill).</summary>
             public float Reach;
+            /// <summary>
+            /// How far from its centre the location's objects placed high above it reach, or -1 for none. A troll cave
+            /// (TrollCave02) has no DungeonGenerator but builds its interior 5000 m up, like a dungeon: its spawner, chests
+            /// and pickables sit there. Seen in testing: those were never swept, so each reset stacked another copy.
+            /// </summary>
+            public float HighReach = -1f;
         }
 
         [Flags]
@@ -159,6 +165,23 @@ namespace RavenIron.Restless
         private static string Describe(Shape s) => s == Shape.Interior ? "dungeon"
             : s == Shape.GroundGenerator ? "outdoor, generated" : "outdoor";
 
+        internal static string PrefabName(int hash)
+        {
+            var go = ZNetScene.instance != null ? ZNetScene.instance.GetPrefab(hash) : null;
+            return go != null ? go.name : hash.ToString();
+        }
+
+        /// <summary>Verbose: the footprint and the location's own prefabs, for the reset log.</summary>
+        internal static string FootprintText(Site site)
+        {
+            var shape = ShapeOf(site.Location);
+            if (shape == null) return "no shape";
+            var names = new List<string>();
+            foreach (var h in shape.Prefabs) if (names.Count < 30) names.Add(PrefabName(h));
+            return $"radius {Radius(site):0} m (exterior {site.Location.m_exteriorRadius:0}, reach {shape.Reach:0}, high reach {shape.HighReach:0}), " +
+                   $"{shape.Shape}, {shape.Prefabs.Count} own prefab(s): {string.Join(", ", names.ToArray())}";
+        }
+
         /// <summary>Horizontal radius of the location's above-ground footprint.</summary>
         internal static float Radius(Site site)
         {
@@ -173,7 +196,13 @@ namespace RavenIron.Restless
             Vector3 c = site.Pos;
             var shape = ShapeOf(site.Location);
             if (p.y > c.y + InteriorAbove)
-                return shape != null && shape.Shape == Shape.Interior && InBox(site, shape, p, margin);
+            {
+                if (shape == null) return false;
+                if (shape.Shape == Shape.Interior) return InBox(site, shape, p, margin);
+                if (shape.HighReach < 0f) return false;
+                float hx = p.x - c.x, hz = p.z - c.z, hr = shape.HighReach + margin;
+                return hx * hx + hz * hz <= hr * hr;
+            }
             float dx = p.x - c.x, dz = p.z - c.z;
             float r = Radius(site) + margin;
             if (dx * dx + dz * dz <= r * r) return true;
@@ -211,6 +240,20 @@ namespace RavenIron.Restless
                     var go = ZNetScene.instance != null ? ZNetScene.instance.GetPrefab(list[i].Key) : null;
                     parts.Add($"{(go != null ? go.name : list[i].Key.ToString())} x{list[i].Value}");
                 }
+                return parts.Count == 0 ? "nothing" : string.Join(", ", parts.ToArray());
+            }
+
+            /// <summary>Verbose only: what was wiped, and what lay just outside the footprint.</summary>
+            public readonly Dictionary<string, int> Removed = new Dictionary<string, int>();
+            public readonly List<string> Outside = new List<string>();
+            public void Near(string s) { if (Outside.Count < 40) Outside.Add(s); }
+
+            public static string Summary(Dictionary<string, int> d, int top)
+            {
+                var list = new List<KeyValuePair<string, int>>(d);
+                list.Sort((a, b) => b.Value.CompareTo(a.Value));
+                var parts = new List<string>();
+                for (int i = 0; i < list.Count && i < top; i++) parts.Add($"{list[i].Key} x{list[i].Value}");
                 return parts.Count == 0 ? "nothing" : string.Join(", ", parts.ToArray());
             }
 
@@ -271,7 +314,16 @@ namespace RavenIron.Restless
             {
                 if (zdo == site.Proxy) { wipe.Add(zdo); continue; }
                 Vector3 p = zdo.GetPosition();
-                if (!Contains(site, p, 0f)) continue;
+                if (!Contains(site, p, 0f))
+                {
+                    // Diagnostics: what lies just outside the footprint, so a too-small footprint shows up in one run.
+                    if (Plugin.VerboseLogging.Value)
+                    {
+                        float flat = new Vector2(p.x - pos.x, p.z - pos.z).magnitude;
+                        if (flat < Radius(site) + 40f) r.Near($"{PrefabName(zdo.GetPrefab())} {flat:0}m dy{p.y - pos.y:0}");
+                    }
+                    continue;
+                }
                 bool interior = p.y > pos.y + InteriorAbove;
                 int prefab = zdo.GetPrefab();
 
@@ -338,6 +390,13 @@ namespace RavenIron.Restless
                 ZDOMan.instance.DestroyZDO(zdo);
             }
             r.Deleted = wipe.Count;
+            if (Plugin.VerboseLogging.Value)
+                foreach (var zdo in wipe)
+                {
+                    string n = PrefabName(zdo.GetPrefab());
+                    r.Removed.TryGetValue(n, out var c);
+                    r.Removed[n] = c + 1;
+                }
 
             // 3. Respawn through vanilla, in ghost mode, then stamp the new proxy and throw the GameObjects away.
             var ghosts = new List<GameObject>();
@@ -397,7 +456,9 @@ namespace RavenIron.Restless
                     {
                         shape.Prefabs.Add(Utils.GetPrefabName(nv.gameObject).GetStableHashCode());
                         Vector3 d = nv.transform.position - root;
-                        if (d.y < InteriorAbove) shape.Reach = Mathf.Max(shape.Reach, new Vector2(d.x, d.z).magnitude + 2f);
+                        float flat = new Vector2(d.x, d.z).magnitude + 2f;
+                        if (d.y < InteriorAbove) shape.Reach = Mathf.Max(shape.Reach, flat);
+                        else shape.HighReach = Mathf.Max(shape.HighReach, flat);
                     }
                     var gen = asset.GetComponentInChildren<DungeonGenerator>(true);
                     if (gen != null)

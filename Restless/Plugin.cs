@@ -179,6 +179,12 @@ namespace RavenIron.Restless
             {
                 Log.LogInfo($"Reset {site.Name} at ({p.x:0}, {p.z:0}), zone {site.Zone} ({reason}): removed {r.Deleted}, kept {r.Kept}, respawned {r.Spawned}.");
                 if (VerboseLogging.Value && r.Kept > 0) Log.LogInfo($"  kept: {r.KeptSummary(12)}");
+                if (VerboseLogging.Value)
+                {
+                    Log.LogInfo($"  footprint: {Resetter.FootprintText(site)}");
+                    Log.LogInfo($"  removed: {Resetter.Result.Summary(r.Removed, 20)}");
+                    Log.LogInfo($"  just outside: {(r.Outside.Count == 0 ? "nothing" : string.Join("; ", r.Outside.ToArray()))}");
+                }
             }
             else if (r.Waiting)
             {
