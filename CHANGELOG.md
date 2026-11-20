@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.0
 
 - The config reloads live: save `com.raveniron.restless.cfg` and the server picks up the change within 3 seconds,
   no restart. The log names each setting that changed.

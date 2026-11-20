@@ -93,7 +93,7 @@ Stand at it and type `restless`. The first word of the answer is the name {{key 
 |---|---|---|
 | Does all the work: watches who is near what, and resets. | Install it to use `restless` in F5, or use `/kick restless` in chat with nothing installed. | Need nothing. They just find the places full again. |
 
-There's no version check: a player with or without the mod can join. An admin's client should run the same version as the server for the commands to answer.
+There's no version check: a player with or without the mod can join. An admin who installs it should run the same version as the server for `restless` in F5 to answer; the chat commands need nothing installed.
 
 {{rune ᛗ | COMPATIBILITY | LIVING TOGETHER | 2e5e3a}}
 
