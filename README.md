@@ -64,6 +64,18 @@ Open the console with **F5**. Every command checks the server's admin list.
 | `restless reset 200` | Resets every one within 200 m (up to 5000 m), one every half second, and sends you a summary. Any with a player inside are skipped. |
 | `restless reload` | Re-reads the server's config right away and says what changed. You rarely need it: the server notices a saved config file within 3 seconds, no restart needed. |
 
+**No mod on your game? Use chat.** The same commands work from the chat box with nothing installed, through the game's own `kick` command, which is the only admin command that carries a word to the server. Join the words with `-`:
+
+| In chat | Same as |
+|---|---|
+| `/kick restless` | `restless` |
+| `/kick restless-200` | `restless 200` |
+| `/kick restless-reset` | `restless reset` |
+| `/kick restless-reset-200` | `restless reset 200` |
+| `/kick restless-reload` | `restless reload` |
+
+The answer appears top left, and in full in the F5 console. Nobody gets kicked: a word starting with `restless-` never reaches the game's kick.
+
 <details>
 <summary>How to tell what a location is called</summary>
 
@@ -75,7 +87,7 @@ Stand at it and type `restless`. The first word of the answer is the name `Inclu
 
 | 🖥️ Server | 👑 Admins | 🧍 Players |
 |---|---|---|
-| Does all the work: watches who is near what, and resets. | Install it to use `restless`. | Need nothing. They just find the places full again. |
+| Does all the work: watches who is near what, and resets. | Install it to use `restless` in F5, or use `/kick restless` in chat with nothing installed. | Need nothing. They just find the places full again. |
 
 There's no version check: a player with or without the mod can join. An admin's client should run the same version as the server for the commands to answer.
 

@@ -14,6 +14,8 @@ namespace RavenIron.Restless
     ///   restless reset 200    reset every one within 200 m
     ///   restless reload       re-read the server's .cfg now (it also re-reads itself within 3 s of being saved)
     /// The client forwards the verb, the radius and its position; the server checks the adminlist itself.
+    /// With no mod on the client, the same commands go through vanilla's `kick` in chat (see Patch_Kick):
+    ///   /kick restless   /kick restless-200   /kick restless-reset   /kick restless-reset-200   /kick restless-reload
     /// Resets are queued and run one every half second, so a big radius never stalls the server, and the asker
     /// gets one summary when the batch is done.
     /// </summary>
@@ -28,7 +30,13 @@ namespace RavenIron.Restless
 
         internal static void Register(ZRoutedRpc rpc)
         {
-            rpc.Register<string, Vector3, float>(CmdRpc, OnCommand);
+            // From a client with the mod (its F5 `restless`): answers go back over Restless_Reply.
+            rpc.Register<string, Vector3, float>(CmdRpc, (sender, verb, pos, radius) =>
+            {
+                _chatSenders.Remove(sender);
+                OnCommand(sender, verb, pos, radius);
+            });
+            _chatSenders.Clear();
             rpc.Register<string>(ReplyRpc, OnReply);
             Batches.Clear();
         }
@@ -71,7 +79,53 @@ namespace RavenIron.Restless
 
         private static void Reply(long to, string text)
         {
+            if (_chatSenders.Contains(to))
+            {
+                // A player without the mod: vanilla's own RemotePrint (the F5 console, as `kick` itself answers) and its
+                // ShowMessage (top left) for the first line, so it is seen from the chat box too.
+                var peer = ZNet.instance != null ? ZNet.instance.GetPeer(to) : null;
+                if (peer != null) peer.m_rpc.Invoke("RemotePrint", text);
+                int nl = text.IndexOf('\n');
+                ZRoutedRpc.instance?.InvokeRoutedRPC(to, "ShowMessage", (int)MessageHud.MessageType.TopLeft,
+                    nl < 0 ? text : text.Substring(0, nl) + " (more in F5)");
+                return;
+            }
             if (ZRoutedRpc.instance != null) ZRoutedRpc.instance.InvokeRoutedRPC(to, ReplyRpc, text);
+        }
+
+        // ---- chat commands for players without the mod --------------------------------------------------------------
+
+        /// <summary>Senders whose last command came through chat, so their answers go out through vanilla RPCs.</summary>
+        private static readonly HashSet<long> _chatSenders = new HashSet<long>();
+
+        /// <summary>
+        /// A vanilla client cannot send the server any text a mod could read, except through its admin commands. `kick`
+        /// carries one word (args[1]) to ZNet.RPC_Kick on the server, and is allowed in chat. So `/kick restless-reset-200`
+        /// reaches us with no client mod; any other word is left to vanilla. The server checks the admin list itself.
+        /// </summary>
+        [HarmonyPatch(typeof(ZNet), "RPC_Kick")]
+        private static class Patch_Kick
+        {
+            [HarmonyPriority(Priority.Low)]
+            private static bool Prefix(ZRpc rpc, string user, bool __runOriginal)
+            {
+                if (!__runOriginal) return false;
+                if (!Rules.ParseChatWord(user, out string verb, out float radius, out string error)) return true;
+                try
+                {
+                    ZNetPeer peer = null;
+                    foreach (var p in ZNet.instance.GetPeers()) if (p.m_rpc == rpc) { peer = p; break; }
+                    if (peer == null) return false;
+                    _chatSenders.Add(peer.m_uid);
+                    Plugin.Log.LogInfo($"{peer.m_playerName} sent `{user}` through chat.");
+                    if (error != null) { Reply(peer.m_uid, "Restless: " + error); return false; }
+                    var zdo = ZDOMan.instance?.GetZDO(peer.m_characterID);
+                    Vector3 pos = zdo != null ? zdo.GetPosition() : peer.m_refPos;
+                    OnCommand(peer.m_uid, verb, pos, radius);
+                }
+                catch (Exception e) { Plugin.Log.LogError($"chat command `{user}` failed: {e}"); }
+                return false; // ours: never let vanilla try to kick a player called "restless"
+            }
         }
 
         private static void OnCommand(long sender, string verb, Vector3 pos, float radius)

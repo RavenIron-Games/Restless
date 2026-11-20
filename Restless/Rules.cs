@@ -90,6 +90,43 @@ namespace RavenIron.Restless
             return true;
         }
 
+        public const string ChatUsage =
+            "usage in chat: /kick restless | /kick restless-200 | /kick restless-reset | /kick restless-reset-200 | /kick restless-reload";
+
+        /// <summary>
+        /// Reads the one word a vanilla `kick` carries to the server (the client sends only args[1]), so an admin with no
+        /// mod can type `/kick restless-reset-200` in chat. False when the word is not ours, which leaves the kick to
+        /// vanilla: "restless" alone, or "restless" then '-' or ':' and parts. "restlessbob" is a player's name, not ours.
+        /// True with verb "status", "reset" or "reload", or with an error to show the admin.
+        /// </summary>
+        public static bool ParseChatWord(string word, out string verb, out float radius, out string error)
+        {
+            verb = "status"; radius = 0; error = null;
+            if (word == null) return false;
+            word = word.Trim();
+            const string tag = "restless";
+            if (!word.StartsWith(tag, StringComparison.OrdinalIgnoreCase)) return false;
+            string rest = word.Substring(tag.Length);
+            if (rest.Length > 0 && rest[0] != '-' && rest[0] != ':') return false;
+
+            var parts = rest.Split(new[] { '-', ':' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 1 && string.Equals(parts[0], "reload", StringComparison.OrdinalIgnoreCase))
+            {
+                verb = "reload";
+                return true;
+            }
+            var args = new string[parts.Length + 1];
+            args[0] = tag;
+            Array.Copy(parts, 0, args, 1, parts.Length);
+            if (!ParseCommand(args, out bool reset, out radius, out error))
+            {
+                if (error != null && error.StartsWith("usage")) error = ChatUsage;
+                return true;
+            }
+            verb = reset ? "reset" : "status";
+            return true;
+        }
+
         /// <summary>
         /// Dungeons that must never be wiped: Hildir's quest dungeons, whose chests are tied to world quest state. Owners
         /// can edit it. The Queen's lair (Mistlands_DvergrBossEntrance1) left this list after 0.1.0 (owner, 2026-11-20):
