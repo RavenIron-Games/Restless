@@ -357,10 +357,11 @@ namespace RavenIron.Restless
                 // leave `_frac` rubble. Player pieces carry a creator and natural rocks are vegetation, both handled above.
                 // High up, a location with no generator (a troll cave) owns only its own prefabs. Its interior can sit
                 // beside a neighbouring dungeon's, and wiping everything there took a burial chamber's door and skeleton
-                // spawner in testing. Its creatures go with their spawners (step 1b).
+                // spawner in testing. Its creatures go too, linked to a spawner or not (an unlinked troll was kept in
+                // testing); Contains holds this area inside the location's own zone, so a neighbour's are never in it.
                 if (interior && shape.Shape != Shape.Interior)
                 {
-                    if (own) wipe.Add(zdo); else r.Keep(prefab);
+                    if (own || (kind & PrefabKind.Character) != 0) wipe.Add(zdo); else r.Keep(prefab);
                     continue;
                 }
                 bool generated = interior || (shape.Shape == Shape.GroundGenerator && InBox(site, shape, p, 0f));
