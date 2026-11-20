@@ -200,6 +200,10 @@ namespace RavenIron.Restless
                 if (shape == null) return false;
                 if (shape.Shape == Shape.Interior) return InBox(site, shape, p, margin);
                 if (shape.HighReach < 0f) return false;
+                // Held inside the location's own zone, like InBox, so it never reaches a neighbour's interior.
+                Vector3 zc = ZoneSystem.GetZonePos(site.Zone);
+                float half = ZoneSystem.c_ZoneSize * 0.5f + margin;
+                if (Mathf.Abs(p.x - zc.x) > half || Mathf.Abs(p.z - zc.z) > half) return false;
                 float hx = p.x - c.x, hz = p.z - c.z, hr = shape.HighReach + margin;
                 return hx * hx + hz * hz <= hr * hr;
             }
@@ -351,6 +355,14 @@ namespace RavenIron.Restless
                 // when its prefab is not in the location's own list: the charred fortress gains a ballista
                 // (piece_Charred_Balista) per rebuild from something other than its own children, and its broken walls
                 // leave `_frac` rubble. Player pieces carry a creator and natural rocks are vegetation, both handled above.
+                // High up, a location with no generator (a troll cave) owns only its own prefabs. Its interior can sit
+                // beside a neighbouring dungeon's, and wiping everything there took a burial chamber's door and skeleton
+                // spawner in testing. Its creatures go with their spawners (step 1b).
+                if (interior && shape.Shape != Shape.Interior)
+                {
+                    if (own) wipe.Add(zdo); else r.Keep(prefab);
+                    continue;
+                }
                 bool generated = interior || (shape.Shape == Shape.GroundGenerator && InBox(site, shape, p, 0f));
                 bool structure = (kind & PrefabKind.Structure) != 0;
                 if (generated || own || structure || (kind & PrefabKind.Character) != 0) wipe.Add(zdo);
