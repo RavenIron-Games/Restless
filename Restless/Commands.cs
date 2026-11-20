@@ -122,6 +122,9 @@ namespace RavenIron.Restless
                     var zdo = ZDOMan.instance?.GetZDO(peer.m_characterID);
                     Vector3 pos = zdo != null ? zdo.GetPosition() : peer.m_refPos;
                     OnCommand(peer.m_uid, verb, pos, radius);
+                    // `/kick restless reset 200` arrives as just "restless" (kick sends one word): show how to join them.
+                    if (string.Equals(user.Trim(), "restless", StringComparison.OrdinalIgnoreCase))
+                        peer.m_rpc.Invoke("RemotePrint", "Restless: " + Rules.ChatUsage + " (join the words with -)");
                 }
                 catch (Exception e) { Plugin.Log.LogError($"chat command `{user}` failed: {e}"); }
                 return false; // ours: never let vanilla try to kick a player called "restless"
