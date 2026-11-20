@@ -39,12 +39,12 @@ namespace RavenIron.Restless
             if (t != _fileTime)
             {
                 _fileTime = t;
-                ReloadFile("its file changed");
+                ReloadFile("its file changed", quietIfSame: true);
             }
         }
 
         /// <summary>Re-read the .cfg. Returns a line saying what changed, for the log and the `restless reload` reply.</summary>
-        internal static string ReloadFile(string why)
+        internal static string ReloadFile(string why, bool quietIfSame = false)
         {
             if (_file == null) return "no config file";
             try
@@ -57,7 +57,8 @@ namespace RavenIron.Restless
                     if (before[e] != e.GetSerializedValue()) changed.Add($"{e.Definition.Key} {before[e]} -> {e.GetSerializedValue()}");
                 string line = changed.Count > 0 ? $"config re-read ({why}): {string.Join(", ", changed.ToArray())}"
                                                 : $"config re-read ({why}): nothing changed";
-                Plugin.Log.LogInfo(line);
+                // A save that changed nothing (a config manager, an editor touching the file) is not worth a log line.
+                if (changed.Count > 0 || !quietIfSame) Plugin.Log.LogInfo(line);
                 return line;
             }
             catch (Exception ex)
