@@ -19,15 +19,17 @@ On a long-running server every crypt, cave and camp near home gets cleared once 
 
 It happens quietly, the next time someone comes near, and never while anyone is standing in it. Nothing a player built is ever touched.
 
-{{rune ᛞ | NEW IN {{version}} | FIRST RELEASE | 8b1e1e}}
+{{rune ᛞ | NEW IN {{version}} | TROLL CAVES FIXED | 8b1e1e}}
 
-> **🪦 Everything, for the first time.** Burial chambers, sunken crypts, frost caves and infested mines reset on their own. Fuling villages, charred fortresses and troll caves join them by default, and any other location can be added by name. Admins get one console command to check or reset what's around them.
+> **🧌 Troll caves reset properly.** A troll cave's inside is built high above its entrance, and earlier versions never cleared it: every reset stacked another troll, chest and set of mushrooms on top of the last. The first reset with this version clears what piled up, a player inside the cave now holds its reset back, and nothing of a neighbouring burial chamber is ever touched.
+>
+> **From 0.2.0:** admin commands from chat with no mod installed (`/kick restless-reset`), the config reloads by itself when you save it, and the Queen's lair resets by default.
 
 {{rune ᚾ | BEFORE YOU INSTALL | READ THIS | b8860b}}
 
 | | |
 |---|---|
-| **Who needs it** | **The server.** Players don't need it, except admins who want the `restless` console command. |
+| **Who needs it** | **The server.** Players don't need it, and admins don't either: every command works from chat. |
 | **A cleared place comes back** | That's the point, but say so to your players: a crypt they emptied will be full again one day, monsters included. |
 | **Loot left inside** | Items lying on the ground are kept, but a chest's contents are replaced with fresh loot. Don't store things in a dungeon's chests. |
 | **Needs** | BepInEx only. No Jotunn, no asset bundles. |
@@ -101,11 +103,11 @@ There's no version check: a player with or without the mod can join. An admin wh
 |---|---|
 | **Other location reset mods** | Don't run two. Each would reset on its own schedule. |
 | **Mods that add locations** | Their dungeons reset if the game builds their interiors the way it builds its own. For anything else, add its name to {{key Include}}. Objects from a mod the server doesn't have are never removed. |
-| **Mods that add items or creatures** | Fine. Restless only removes what the location placed, and creatures standing in it. |
+| **Mods that add items or creatures** | Fine. Restless only removes what the location placed, the creatures standing in it, and the ones its spawners made. |
 
 {{rune ᛚ | SETTINGS | ALL ON THE SERVER | b8860b}}
 
-Every setting is read on the server, in `BepInEx\config\com.raveniron.restless.cfg`. Restart the server after changing one.
+Every setting is read on the server, in `BepInEx\config\com.raveniron.restless.cfg`. No restart needed: save the file and the server picks up the change within 3 seconds, and its log names each setting that changed.
 
 {{gen settings}}
 

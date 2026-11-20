@@ -15,15 +15,17 @@ On a long-running server every crypt, cave and camp near home gets cleared once 
 
 It happens quietly, the next time someone comes near, and never while anyone is standing in it. Nothing a player built is ever touched.
 
-![NEW IN 0.2.1 FIRST RELEASE](https://img.shields.io/badge/NEW_IN_0.2.1-FIRST_RELEASE-8b1e1e?style=for-the-badge&labelColor=1b1b1b&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE0Ij48cGF0aCBkPSJNMS41IDFWMTNNOC41IDFWMTNNMS41IDFMOC41IDEzTTguNSAxTDEuNSAxMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYmY4MzgzIiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B)
+![NEW IN 0.2.1 TROLL CAVES FIXED](https://img.shields.io/badge/NEW_IN_0.2.1-TROLL_CAVES_FIXED-8b1e1e?style=for-the-badge&labelColor=1b1b1b&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE0Ij48cGF0aCBkPSJNMS41IDFWMTNNOC41IDFWMTNNMS41IDFMOC41IDEzTTguNSAxTDEuNSAxMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYmY4MzgzIiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B)
 
-> **🪦 Everything, for the first time.** Burial chambers, sunken crypts, frost caves and infested mines reset on their own. Fuling villages, charred fortresses and troll caves join them by default, and any other location can be added by name. Admins get one console command to check or reset what's around them.
+> **🧌 Troll caves reset properly.** A troll cave's inside is built high above its entrance, and earlier versions never cleared it: every reset stacked another troll, chest and set of mushrooms on top of the last. The first reset with this version clears what piled up, a player inside the cave now holds its reset back, and nothing of a neighbouring burial chamber is ever touched.
+>
+> **From 0.2.0:** admin commands from chat with no mod installed (`/kick restless-reset`), the config reloads by itself when you save it, and the Queen's lair resets by default.
 
 ![BEFORE YOU INSTALL READ THIS](https://img.shields.io/badge/BEFORE_YOU_INSTALL-READ_THIS-b8860b?style=for-the-badge&labelColor=1b1b1b&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE0Ij48cGF0aCBkPSJNNSAxVjEzTTIgNUw4IDkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q4YmM3OSIgc3Ryb2tlLXdpZHRoPSIxLjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D)
 
 | | |
 |---|---|
-| **Who needs it** | **The server.** Players don't need it, except admins who want the `restless` console command. |
+| **Who needs it** | **The server.** Players don't need it, and admins don't either: every command works from chat. |
 | **A cleared place comes back** | That's the point, but say so to your players: a crypt they emptied will be full again one day, monsters included. |
 | **Loot left inside** | Items lying on the ground are kept, but a chest's contents are replaced with fresh loot. Don't store things in a dungeon's chests. |
 | **Needs** | BepInEx only. No Jotunn, no asset bundles. |
@@ -97,11 +99,11 @@ There's no version check: a player with or without the mod can join. An admin wh
 |---|---|
 | **Other location reset mods** | Don't run two. Each would reset on its own schedule. |
 | **Mods that add locations** | Their dungeons reset if the game builds their interiors the way it builds its own. For anything else, add its name to `Include`. Objects from a mod the server doesn't have are never removed. |
-| **Mods that add items or creatures** | Fine. Restless only removes what the location placed, and creatures standing in it. |
+| **Mods that add items or creatures** | Fine. Restless only removes what the location placed, the creatures standing in it, and the ones its spawners made. |
 
 ![SETTINGS ALL ON THE SERVER](https://img.shields.io/badge/SETTINGS-ALL_ON_THE_SERVER-b8860b?style=for-the-badge&labelColor=1b1b1b&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE0Ij48cGF0aCBkPSJNMyAxVjEzTTMgMUw4IDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q4YmM3OSIgc3Ryb2tlLXdpZHRoPSIxLjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D)
 
-Every setting is read on the server, in `BepInEx\config\com.raveniron.restless.cfg`. Restart the server after changing one.
+Every setting is read on the server, in `BepInEx\config\com.raveniron.restless.cfg`. No restart needed: save the file and the server picks up the change within 3 seconds, and its log names each setting that changed.
 
 | 🔒 Setting | Default | What it does |
 |---|---|---|
@@ -125,7 +127,7 @@ Made by **Raven Iron**. Restless uses no assets: every reset is the game's own s
 | Rune | Meaning | Seals |
 |---|---|---|
 | ![Berkano](https://img.shields.io/badge/_-Berkano-2f7d5b?style=for-the-badge&labelColor=1b1b1b&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE0Ij48cGF0aCBkPSJNMi41IDFWMTNNMi41IDFMNyA0TDIuNSA3TDcgMTBMMi41IDEzIiBmaWxsPSJub25lIiBzdHJva2U9IiM4ZGI4YTUiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4%3D) | ᛒ Berkano: birth | RESTLESS THE DEAD COME BACK, I WHAT COMES BACK |
-| ![Dagaz](https://img.shields.io/badge/_-Dagaz-8b1e1e?style=for-the-badge&labelColor=1b1b1b&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE0Ij48cGF0aCBkPSJNMS41IDFWMTNNOC41IDFWMTNNMS41IDFMOC41IDEzTTguNSAxTDEuNSAxMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYmY4MzgzIiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B) | ᛞ Dagaz: dawn, a new day | NEW IN 0.2.1 FIRST RELEASE |
+| ![Dagaz](https://img.shields.io/badge/_-Dagaz-8b1e1e?style=for-the-badge&labelColor=1b1b1b&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE0Ij48cGF0aCBkPSJNMS41IDFWMTNNOC41IDFWMTNNMS41IDFMOC41IDEzTTguNSAxTDEuNSAxMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYmY4MzgzIiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B) | ᛞ Dagaz: dawn, a new day | NEW IN 0.2.1 TROLL CAVES FIXED |
 | ![Nauthiz](https://img.shields.io/badge/_-Nauthiz-b8860b?style=for-the-badge&labelColor=1b1b1b&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE0Ij48cGF0aCBkPSJNNSAxVjEzTTIgNUw4IDkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q4YmM3OSIgc3Ryb2tlLXdpZHRoPSIxLjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D) | ᚾ Nauthiz: need | BEFORE YOU INSTALL READ THIS |
 | ![Sowilo](https://img.shields.io/badge/_-Sowilo-2f7d5b?style=for-the-badge&labelColor=1b1b1b&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE0Ij48cGF0aCBkPSJNNyAxTDIuNSA2TDcuNSA4TDMgMTMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzhkYjhhNSIgc3Ryb2tlLXdpZHRoPSIxLjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D) | ᛊ Sowilo: the sun | II WHEN IT HAPPENS |
 | ![Algiz](https://img.shields.io/badge/_-Algiz-2f7d5b?style=for-the-badge&labelColor=1b1b1b&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE0Ij48cGF0aCBkPSJNNSAxVjEzTTUgNkwxLjUgMS41TTUgNkw4LjUgMS41IiBmaWxsPSJub25lIiBzdHJva2U9IiM4ZGI4YTUiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4%3D) | ᛉ Algiz: protection | III WHAT STAYS SAFE |
