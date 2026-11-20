@@ -19,14 +19,16 @@ alone unless you add them to `Include`.
 2. Once it is due and a player comes within 300 m again, Restless resets it, as long as no player is inside it or
    within `SafeDistance` (100 m) of its edge.
 3. What the location put there is removed: the dungeon and everything in it, the village's huts, walls, chests and
-   spawners, and the monsters standing in it. Then vanilla's own spawn code rebuilds it with the original seed, so
-   you get the same layout, refilled chests, and spawners and monsters back.
+   spawners, any structure inside it that no player built, and the monsters standing in it. Then vanilla's own spawn
+   code rebuilds it with the original seed, so you get the same layout, refilled chests, and spawners and monsters
+   back. For an outdoor location the server loads the zone's terrain for the rebuild, so huts land on the ground.
 
 At most one location resets every five seconds.
 
 **Never removed:** players, tombstones, anything a player built or owns, tamed creatures, terrain edits, the trees
 and rocks around a location, objects from mods the server doesn't know, and dropped items (unless
-`KeepDroppedItems` is off).
+`KeepDroppedItems` is off). An item of a kind the location itself places, like a fuling camp's barley, counts as the
+location's and is replaced.
 
 **Skipped:** a location players have built in (`SkipIfPlayerBuilt`), and anything on the `Exclude` list. By default
 that's the Queen's lair and Hildir's quest dungeons.

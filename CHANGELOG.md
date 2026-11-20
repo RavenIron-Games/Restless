@@ -2,4 +2,11 @@
 
 ## 0.1.0
 
-- First build: dungeons, fuling villages, charred fortresses and troll caves reset (more outdoor locations via `Include`); `restless [radius]` and `restless reset [radius]` admin commands after ResetAfterDays in-game days when a player comes near, never with anyone inside; `restless` and `restless reset` admin commands.
+- First release. Dungeons (burial chambers, sunken crypts, frost caves, infested mines) reset after `ResetAfterDays`
+  in-game days, the next time a player comes near, never while anyone is inside.
+- Outdoor locations reset when listed in `Include`: fuling villages, charred fortresses and troll caves by default.
+- Rebuilds use the game's own spawn code and the original seed, with the zone's terrain loaded, so the layout comes
+  back as the world first made it.
+- Player builds, tombstones, tamed creatures, terrain edits, trees and rocks, and dropped loot are never removed. A
+  location players have built in is skipped (`SkipIfPlayerBuilt`).
+- Admin console commands: `restless [radius]` and `restless reset [radius]`.
