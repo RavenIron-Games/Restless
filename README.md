@@ -30,9 +30,9 @@ It happens quietly, the next time someone comes near, and never while anyone is 
 
 ![I WHAT COMES BACK](https://img.shields.io/badge/I-WHAT_COMES_BACK-2f7d5b?style=for-the-badge&labelColor=1b1b1b&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE0Ij48cGF0aCBkPSJNMi41IDFWMTNNMi41IDFMNyA0TDIuNSA3TDcgMTBMMi41IDEzIiBmaWxsPSJub25lIiBzdHJva2U9IiM4ZGI4YTUiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4%3D)
 
-- **Every dungeon**: any location with an interior the game builds for it. On a vanilla world that's burial chambers, sunken crypts, frost caves and infested mines.
+- **Every dungeon**: any location with an interior the game builds for it. On a vanilla world that's burial chambers, sunken crypts, frost caves, infested mines and the Queen's lair (its door seals again and the Queen comes back).
 - **Outdoor locations you name**, in `Include`. By default: `GoblinCamp2`, `CharredFortress`, `TrollCave02` (fuling villages, charred fortresses and troll caves).
-- **Never**: `Mistlands_DvergrBossEntrance1`, `Hildir_crypt`, `Hildir_cave`, `Hildir_plainsfortress` (the Queen's lair and Hildir's quest dungeons), and anything else you add to `Exclude`.
+- **Never**: `Hildir_crypt`, `Hildir_cave`, `Hildir_plainsfortress` (Hildir's quest dungeons), and anything else you add to `Exclude`.
 
 A reset removes what the location put there: the rooms and everything in them, the huts and walls, chests, spawners, any structure inside it that no player built, and the monsters standing in it. Then the game's own spawn code rebuilds it from the world's original seed, with the ground loaded so every hut lands where it first stood. The rooms come back room for room.
 
@@ -100,7 +100,7 @@ Every setting is read on the server, in `BepInEx\config\com.raveniron.restless.c
 | `SkipIfPlayerBuilt` | `true` | Leave a location alone when players have built inside it, and look again after another `ResetAfterDays`. |
 | `KeepDroppedItems` | `true` | Loot lying on the ground survives a reset. |
 | `Include` | `GoblinCamp2, CharredFortress, TrollCave02` | Outdoor locations that reset too, comma separated. Dungeons always do. |
-| `Exclude` | `Mistlands_DvergrBossEntrance1, Hildir_crypt, Hildir_cave, Hildir_plainsfortress` | Locations that never reset, comma separated. Wins over `Include`. |
+| `Exclude` | `Hildir_crypt, Hildir_cave, Hildir_plainsfortress` | Locations that never reset, comma separated. Wins over `Include`. |
 | `VerboseLogging` | `false` | Log each first sighting, each reset that had to wait, and what each reset kept. |
 
 ![CREDITS RAVEN IRON](https://img.shields.io/badge/CREDITS-RAVEN_IRON-c9a227?style=for-the-badge&labelColor=1b1b1b&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE0Ij48cGF0aCBkPSJNNSAxTDguNSA1TDEuNSAxM001IDFMMS41IDVMOC41IDEzIiBmaWxsPSJub25lIiBzdHJva2U9IiNlMWNjODgiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4%3D)

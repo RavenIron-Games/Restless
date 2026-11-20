@@ -5,6 +5,9 @@
 - The config reloads live: save `com.raveniron.restless.cfg` and the server picks up the change within 3 seconds,
   no restart. The log names each setting that changed.
 - New admin command `restless reload`: re-read the config now.
+- The Queen's lair resets by default: `Mistlands_DvergrBossEntrance1` is no longer in the default `Exclude`. Its door
+  seals again and the Queen comes back. A config file written by 0.1.0 keeps its own `Exclude` line; delete
+  `Mistlands_DvergrBossEntrance1` from it to let her reset.
 
 ## 0.1.0
 

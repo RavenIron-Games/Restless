@@ -34,9 +34,9 @@ It happens quietly, the next time someone comes near, and never while anyone is 
 
 {{rune ᛒ | I | WHAT COMES BACK | 2f7d5b}}
 
-- **Every dungeon**: any location with an interior the game builds for it. On a vanilla world that's burial chambers, sunken crypts, frost caves and infested mines.
+- **Every dungeon**: any location with an interior the game builds for it. On a vanilla world that's burial chambers, sunken crypts, frost caves, infested mines and the Queen's lair (its door seals again and the Queen comes back).
 - **Outdoor locations you name**, in {{key Include}}. By default: {{gen include}} (fuling villages, charred fortresses and troll caves).
-- **Never**: {{gen exclude}} (the Queen's lair and Hildir's quest dungeons), and anything else you add to {{key Exclude}}.
+- **Never**: {{gen exclude}} (Hildir's quest dungeons), and anything else you add to {{key Exclude}}.
 
 A reset removes what the location put there: the rooms and everything in them, the huts and walls, chests, spawners, any structure inside it that no player built, and the monsters standing in it. Then the game's own spawn code rebuilds it from the world's original seed, with the ground loaded so every hut lands where it first stood. The rooms come back room for room.
 

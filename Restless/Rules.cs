@@ -53,10 +53,6 @@ namespace RavenIron.Restless
         }
 
         /// <summary>
-        /// Dungeons that must never be wiped: the Queen's lair (a boss) and Hildir's quest dungeons, whose chests are
-        /// tied to world quest state. Only dungeons reset at all, so outdoor locations need no entry. Owners can edit it.
-        /// </summary>
-        /// <summary>
         /// Outdoor locations that reset as well as dungeons: fuling villages and charred fortresses.
         /// Prefab names read from the game's SoftRef manifest (Assets/world/Locations/Heath/GoblinCamp2.prefab,
         /// .../Ashlands/CharredFortress.prefab).
@@ -94,7 +90,11 @@ namespace RavenIron.Restless
             return true;
         }
 
-        public const string DefaultExclude =
-            "Mistlands_DvergrBossEntrance1, Hildir_crypt, Hildir_cave, Hildir_plainsfortress";
+        /// <summary>
+        /// Dungeons that must never be wiped: Hildir's quest dungeons, whose chests are tied to world quest state. Owners
+        /// can edit it. The Queen's lair (Mistlands_DvergrBossEntrance1) left this list after 0.1.0 (owner, 2026-11-20):
+        /// tested on a server, it rebuilds whole, its door seals again and the Queen comes back.
+        /// </summary>
+        public const string DefaultExclude = "Hildir_crypt, Hildir_cave, Hildir_plainsfortress";
     }
 }

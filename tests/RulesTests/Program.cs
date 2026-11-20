@@ -21,8 +21,9 @@ Check("list trims and drops blanks", set.Count == 2 && set.Contains("Crypt2") &&
 Check("list is case-insensitive", set.Contains("crypt2"));
 Check("empty list", Rules.ParseList("").Count == 0 && Rules.ParseList(null).Count == 0);
 var defaults = Rules.ParseList(Rules.DefaultExclude);
-foreach (var must in new[] { "Mistlands_DvergrBossEntrance1", "Hildir_crypt", "Hildir_cave" })
+foreach (var must in new[] { "Hildir_crypt", "Hildir_cave", "Hildir_plainsfortress" })
     Check("default exclude has " + must, defaults.Contains(must));
+Check("the Queen's lair resets by default", !defaults.Contains("Mistlands_DvergrBossEntrance1"));
 
 var inc = Rules.ParseList(Rules.DefaultInclude);
 Check("default include is fuling villages, charred fortresses, troll caves",
