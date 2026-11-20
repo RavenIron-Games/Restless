@@ -142,18 +142,22 @@ namespace RavenIron.Restless
             bool known = Shapes.ContainsKey(name.GetStableHashCode());
             var shape = ShapeOf(loc);
             if (shape == null) { why = "its prefab could not be read"; return null; }
-            if (!known) Plugin.Log.LogInfo($"{name}: {Describe(shape.Shape)}.");
 
-            if (Plugin.IsExcluded(name)) { why = "it is on the Exclude list"; return false; }
-            if (shape.Shape == Shape.Interior) { why = "it is a dungeon"; return true; }
-            if (Plugin.IsIncluded(name)) { why = "it is on the Include list"; return true; }
-            why = "it has no dungeon and is not on the Include list";
-            return false;
+            bool result;
+            if (Plugin.IsExcluded(name)) { why = "it is on the Exclude list"; result = false; }
+            else if (shape.Shape == Shape.Interior) { why = "it is a dungeon"; result = true; }
+            else if (Plugin.IsIncluded(name)) { why = "it is on the Include list"; result = true; }
+            else { why = "it has no dungeon and is not on the Include list"; result = false; }
+
+            // Logged once per kind of location, the first time one is seen: what it is, and whether it resets here.
+            // (The lists are read live, so an Include or Exclude edit later can change the answer; `restless` says
+            // the current one.)
+            if (!known) Plugin.Log.LogInfo($"{name}: {Describe(shape.Shape)}, {(result ? "resets" : "does not reset")} ({why}).");
+            return result;
         }
 
-        private static string Describe(Shape s) => s == Shape.Interior ? "dungeon, resets"
-            : s == Shape.GroundGenerator ? "outdoor, generated (resets only if on the Include list)"
-            : "outdoor (resets only if on the Include list)";
+        private static string Describe(Shape s) => s == Shape.Interior ? "dungeon"
+            : s == Shape.GroundGenerator ? "outdoor, generated" : "outdoor";
 
         /// <summary>Horizontal radius of the location's above-ground footprint.</summary>
         internal static float Radius(Site site)
