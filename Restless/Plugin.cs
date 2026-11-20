@@ -47,8 +47,8 @@ namespace RavenIron.Restless
             Enabled = Config.Bind("1 - General", "Enabled", true,
                 "Master switch. Read on the server.");
             ResetAfterDays = Config.Bind("1 - General", "ResetAfterDays", 30f,
-                new ConfigDescription("In-game days after which a dungeon resets. World time stops while the server is empty, " +
-                                      "so this counts days somebody was online. A dungeon Restless has never seen starts its count " +
+                new ConfigDescription("In-game days after which a location resets. World time stops while the server is empty, " +
+                                      "so this counts days somebody was online. A location Restless has never seen starts its count " +
                                       "the first time a player comes near it.", new AcceptableValueRange<float>(0.1f, 1000f)));
             TriggerDistance = Config.Bind("1 - General", "TriggerDistance", 300f,
                 new ConfigDescription("A due location resets when a player comes this close (metres, across the ground).",
@@ -62,8 +62,8 @@ namespace RavenIron.Restless
             KeepDroppedItems = Config.Bind("2 - Protection", "KeepDroppedItems", true,
                 "Items lying on the ground inside a location survive its reset. Off: they are wiped with it.");
             Include = Config.Bind("1 - General", "Include", Rules.DefaultInclude,
-                "Outdoor locations that reset too, comma separated (dungeons always do). Default: fuling villages (GoblinCamp2) " +
-                "and charred fortresses (CharredFortress). `restless` in the console names the location you are standing at.");
+                "Outdoor locations that reset too, comma separated (dungeons always do). Default: fuling villages (GoblinCamp2), " +
+                "charred fortresses (CharredFortress) and troll caves (TrollCave02). `restless` in the console names the location you are standing at.");
             Exclude = Config.Bind("2 - Protection", "Exclude", Rules.DefaultExclude,
                 "Location names that never reset, comma separated; wins over Include. `restless` in the console names the one you are standing at.");
             VerboseLogging = Config.Bind("3 - Debug", "VerboseLogging", false,
