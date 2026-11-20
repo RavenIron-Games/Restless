@@ -311,6 +311,25 @@ namespace RavenIron.Restless
                 return r;
             }
 
+            // 1b. The creatures the location's spawners made, wherever they stand now. A troll that followed a player out
+            // of its cave is outside the footprint, so the sweep above never sees it; the rebuilt spawner has no link to
+            // it and spawns another, so every reset added a troll (seen in testing). Each CreatureSpawner keeps that link
+            // on its own ZDO (ConnectionType.Spawned). A tamed or player-made creature is still never touched.
+            var seen = new HashSet<ZDOID>();
+            foreach (var zdo in wipe) seen.Add(zdo.m_uid);
+            int linked = wipe.Count;
+            for (int i = 0; i < linked; i++)
+            {
+                ZDOID spawned = wipe[i].GetConnectionZDOID(ZDOExtraData.ConnectionType.Spawned);
+                if (spawned.IsNone() || !seen.Add(spawned)) continue;
+                var creature = ZDOMan.instance.GetZDO(spawned);
+                if (creature == null) continue;
+                int cp = creature.GetPrefab();
+                if (cp == PlayerHash || creature.GetBool(ZDOVars.s_tamed) || creature.GetLong(ZDOVars.s_creator) != 0) continue;
+                if ((KindOf(cp) & PrefabKind.Character) == 0) continue;
+                wipe.Add(creature);
+            }
+
             // 2. Wipe. The server takes ownership first: DestroyZDO is a no-op for a ZDO it does not own.
             long me = ZDOMan.GetSessionID();
             foreach (var zdo in wipe)
