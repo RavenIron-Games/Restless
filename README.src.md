@@ -102,6 +102,7 @@ There's no version check: a player with or without the mod can join. An admin wh
 | | |
 |---|---|
 | **Other location reset mods** | Don't run two. Each would reset on its own schedule. |
+| **OreMines (blacks7ar)** | Works alongside. Its mines reset themselves, so Restless leaves every `BOM_…Mine` location to it. To have Restless reset one instead, put its name in {{key Include}}. |
 | **Mods that add locations** | Their dungeons reset if the game builds their interiors the way it builds its own. For anything else, add its name to {{key Include}}. Objects from a mod the server doesn't have are never removed. |
 | **Mods that add items or creatures** | Fine. Restless only removes what the location placed, the creatures standing in it, and the ones its spawners made. |
 

@@ -56,5 +56,14 @@ Check("chat: a player's name is left to vanilla", !W("restlessbob", out _, out _
 Check("chat: junk is ours, with the chat usage", W("restless-banana", out _, out _, out var c7) && c7 == Rules.ChatUsage);
 Check("chat: too big a radius is ours, with the limit", W("restless-reset-99999", out _, out _, out var c8) && c8 != null && c8.Contains("at most"));
 
+// OreMines resets its own mines: every one of its 14 location names, and nothing else.
+foreach (var mine in new[] { "BOM_FlintMine01", "BOM_FlintMine02", "BOM_CopperMine01", "BOM_CopperMine02", "BOM_TinMine01",
+    "BOM_TinMine02", "BOM_CoalMine01", "BOM_CoalMine02", "BOM_IronMine01", "BOM_IronMine02", "BOM_SilverMine01",
+    "BOM_SilverMine02", "BOM_BlackMetalMine01", "BOM_BlackMetalMine02", "BOM_FlametalMine01", "BOM_FlametalMine02" })
+    Check("OreMines owns " + mine, Rules.ResetByAnotherMod(mine) == "OreMines");
+Check("vanilla locations are nobody else's", Rules.ResetByAnotherMod("Crypt3") == null && Rules.ResetByAnotherMod("TrollCave02") == null
+    && Rules.ResetByAnotherMod("Mistlands_DvergrBossEntrance1") == null && Rules.ResetByAnotherMod(null) == null);
+Check("a BOM_ name without Mine is not a mine", Rules.ResetByAnotherMod("BOM_EikthyrKey") == null);
+
 Console.WriteLine($"{passed}/{passed + failed} passed");
 return failed == 0 ? 0 : 1;

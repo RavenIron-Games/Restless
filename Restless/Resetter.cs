@@ -48,6 +48,7 @@ namespace RavenIron.Restless
         private static bool _spawnMissingLogged;
 
         private static readonly Dictionary<int, LocationShape> Shapes = new Dictionary<int, LocationShape>();
+        private static readonly HashSet<string> OtherModLogged = new HashSet<string>();
         private static readonly Dictionary<int, PrefabKind> Kinds = new Dictionary<int, PrefabKind>();
         private static readonly List<ZDO> Scratch = new List<ZDO>();
         private static HashSet<int> _vegetation;
@@ -145,6 +146,15 @@ namespace RavenIron.Restless
         internal static bool? Eligible(ZoneSystem.ZoneLocation loc, out string why)
         {
             string name = loc.m_prefab.Name;
+
+            // Another mod's locations that reset themselves. Checked before ShapeOf, so their prefab is never even loaded.
+            if (Rules.ResetByAnotherMod(name) is string owner && !Plugin.IsIncluded(name))
+            {
+                why = $"{owner} resets it itself (put it on Include to have Restless do it instead)";
+                if (OtherModLogged.Add(name)) Plugin.Log.LogInfo($"{name}: does not reset ({why}).");
+                return false;
+            }
+
             bool known = Shapes.ContainsKey(name.GetStableHashCode());
             var shape = ShapeOf(loc);
             if (shape == null) { why = "its prefab could not be read"; return null; }

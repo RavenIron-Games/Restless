@@ -90,6 +90,19 @@ namespace RavenIron.Restless
             return true;
         }
 
+        /// <summary>
+        /// The mod that resets this location itself, or null. OreMines (blacks7ar.OreMines, 1.2.1 decompiled 2026-11-20)
+        /// re-rolls the veins and spawners of every loaded location whose name starts with "BOM_" and contains "Mine",
+        /// on its own reset day or `/mines reset`, using the live location objects. Restless rebuilding the same mine
+        /// on its own schedule would fight that, so its mines are left to it. The match is OreMines' own filter.
+        /// </summary>
+        public static string ResetByAnotherMod(string locationName)
+        {
+            if (string.IsNullOrEmpty(locationName)) return null;
+            if (locationName.StartsWith("BOM_", StringComparison.Ordinal) && locationName.Contains("Mine")) return "OreMines";
+            return null;
+        }
+
         public const string ChatUsage =
             "usage in chat: /kick restless | /kick restless-200 | /kick restless-reset | /kick restless-reset-200 | /kick restless-reload";
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Works alongside OreMines (blacks7ar): its mines reset themselves, so Restless now leaves every `BOM_…Mine` location
+  to it instead of resetting them a second time on its own schedule. Put one on `Include` to have Restless do it.
+
 ## 0.2.1
 
 - Troll caves reset properly. Their inside is built high above the entrance, the way a dungeon's is, and was never
