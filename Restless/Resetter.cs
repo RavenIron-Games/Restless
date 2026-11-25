@@ -59,7 +59,7 @@ namespace RavenIron.Restless
             public ZoneSystem.ZoneLocation Location;
             public ZDO Proxy;
             public Vector2s Zone;
-            public string Name => Location.m_prefab.Name;
+            public string Name => PrefabNames.Of(Location.m_prefab);
             public Vector3 Pos => Proxy.GetPosition();
         }
 
@@ -113,7 +113,7 @@ namespace RavenIron.Restless
             var zs = ZoneSystem.instance;
             if (zs == null || !zs.m_locationInstances.TryGetValue(zone, out var inst) || !inst.m_placed || inst.m_location == null)
                 return null;
-            int hash = inst.m_location.m_prefab.Name.GetStableHashCode();
+            int hash = PrefabNames.Of(inst.m_location.m_prefab).GetStableHashCode();
             Scratch.Clear();
             ZDOMan.instance.FindSectorObjects(zone, new SimulationDistance(0, 0, classic: true), Scratch);
             ZDO best = null;
@@ -145,7 +145,7 @@ namespace RavenIron.Restless
         /// </summary>
         internal static bool? Eligible(ZoneSystem.ZoneLocation loc, out string why)
         {
-            string name = loc.m_prefab.Name;
+            string name = PrefabNames.Of(loc.m_prefab);
 
             // Another mod's locations that reset themselves. Checked before ShapeOf, so their prefab is never even loaded.
             if (Rules.ResetByAnotherMod(name) is string owner && !Plugin.IsIncluded(name))
@@ -464,7 +464,7 @@ namespace RavenIron.Restless
 
         private static LocationShape ShapeOf(ZoneSystem.ZoneLocation loc)
         {
-            int key = loc.m_prefab.Name.GetStableHashCode();
+            int key = PrefabNames.Of(loc.m_prefab).GetStableHashCode();
             if (Shapes.TryGetValue(key, out var cached)) return cached;
             LocationShape shape = null;
             try
@@ -492,13 +492,13 @@ namespace RavenIron.Restless
                         // A ground camp's huts are rooms the generator picks: learn every room's (and door's) prefabs, so a
                         // reset clears them even when they look like wild growth. Interior dungeons need no list: their
                         // whole box is cleared.
-                        if (shape.Shape == Shape.GroundGenerator) AddRoomPrefabs(gen, shape.Prefabs, loc.m_prefab.Name);
+                        if (shape.Shape == Shape.GroundGenerator) AddRoomPrefabs(gen, shape.Prefabs, PrefabNames.Of(loc.m_prefab));
                     }
                 }
             }
             catch (Exception e)
             {
-                Plugin.Log.LogWarning($"Could not read the shape of {loc.m_prefab.Name}: {e.Message}");
+                Plugin.Log.LogWarning($"Could not read the shape of {PrefabNames.Of(loc.m_prefab)}: {e.Message}");
             }
             finally
             {

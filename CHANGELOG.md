@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Works on Valheim 1.0.30. That update renamed the property Restless reads a location's name from, and every check
+  failed with `MissingMethodException: ... SoftReference`1.get_Name()` until the server restarted on a fixed build.
+  The name is now read under either spelling, so this build runs on 1.0.30 and on older versions alike.
 - Works alongside OreMines (blacks7ar): its mines reset themselves, so Restless now leaves every `BOM_…Mine` location
   to it instead of resetting them a second time on its own schedule. Put one on `Include` to have Restless do it.
 
