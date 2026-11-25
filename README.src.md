@@ -19,9 +19,11 @@ On a long-running server every crypt, cave and camp near home gets cleared once 
 
 It happens quietly, the next time someone comes near, and never while anyone is standing in it. Nothing a player built is ever touched.
 
-{{rune ᛞ | NEW IN {{version}} | TROLL CAVES FIXED | 8b1e1e}}
+{{rune ᛞ | NEW IN {{version}} | VALHEIM 1.0.30 | 8b1e1e}}
 
-> **🧌 Troll caves reset properly.** A troll cave's inside is built high above its entrance, and earlier versions never cleared it: every reset stacked another troll, chest and set of mushrooms on top of the last. The first reset with this version clears what piled up, a player inside the cave now holds its reset back, and nothing of a neighbouring burial chamber is ever touched.
+> **⚒️ Works on Valheim 1.0.30.** That update renamed something Restless reads every location's name from, and 0.2.1 stopped resetting anything (its log filled with `MissingMethodException`). This version reads it under either name, so it runs on 1.0.30 and on older versions alike. It also leaves OreMines' mines to OreMines, which resets them itself.
+>
+> **From 0.2.1:** troll caves reset properly, with no more trolls, chests and mushrooms piling up.
 >
 > **From 0.2.0:** admin commands from chat with no mod installed (`/kick restless-reset`), the config reloads by itself when you save it, and the Queen's lair resets by default.
 

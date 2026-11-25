@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.2
 
 - Works on Valheim 1.0.30. That update renamed the property Restless reads a location's name from, and every check
   failed with `MissingMethodException: ... SoftReference`1.get_Name()` until the server restarted on a fixed build.

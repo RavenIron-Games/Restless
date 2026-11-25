@@ -1,6 +1,6 @@
 {
   "name": "Restless",
-  "version_number": "0.2.1",
+  "version_number": "0.2.2",
   "website_url": "https://ravenirongames.com/",
   "description": "Locations reset: crypts, caves and camps return to how the world made them after a set number of in-game days, never while anyone is inside.",
   "dependencies": [
